@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/src/**",
+                "C:/wxWidgets/lib/gcc_lib/mswu",
+                "C:/wxWidgets/include"
+            ],
+            "defines": [
+                "_WINDOWS",
+                "_UNICODE",
+                "__WXMSW__",
+                "NDEBUG",
+                "NOPCH"
+            ],
+            "compilerPath": "C:\\msys64\\ucrt64\\bin\\g++.exe",
+            "cStandard": "c17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "${default}"
+        }
+    ],
+    "version": 4
+}
