@@ -1,76 +1,75 @@
-// wxWidgets "Hello World" Program available on https://docs.wxwidgets.org/trunk/overview_helloworld.html
-
-// For compilers that support precompilation, includes "wx/wx.h".
-#include <wx/wxprec.h>
+#include "MainFrame.h"
 #ifndef WX_PRECOMP
     #include <wx/wx.h>
 #endif
 
-class MyApp : public wxApp 
+bool App::OnInit()
 {
-public:
-    virtual bool OnInit(); 
-}; 
+    //Creates the main window
+    MainFrame *frame = new MainFrame("Minimal wxWidgets App");
 
-class MyFrame : public wxFrame
-{
-public:
-    MyFrame();
-private:
-    void OnHello(wxCommandEvent& event);
-    void OnExit(wxCommandEvent& event);
-    void OnAbout(wxCommandEvent& event);
-};
+    //Initial client dimensions
+    frame->SetClientSize(800, 600);
 
-enum
-{
-    ID_Hello = 1
-};
+    //Centers the application
+    frame->Center();
 
-wxIMPLEMENT_APP(MyApp);
-
-bool MyApp::OnInit()
-{
-    MyFrame *frame = new MyFrame();
+    //Have to implement this line to show it
     frame->Show(true);
+
+    //Starts the loop
     return true;
-}
+};
 
-MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "Hello World")
+//Event table for MainFrame
+BEGIN_EVENT_TABLE(MainFrame, wxFrame)
+    EVT_MENU(wxID_ABOUT, MainFrame::OnAbout)
+    EVT_MENU(wxID_EXIT, MainFrame::OnQuit)
+END_EVENT_TABLE()
+
+MainFrame::MainFrame(const wxString& title)
+         : wxFrame(NULL, wxID_ANY, title)
 {
-    wxMenu *menuFile = new wxMenu;
-    menuFile->Append(ID_Hello, "&Hello...\tCtrl-H", "Help string shown in status bar for this menu item");
-    menuFile->AppendSeparator();
-    menuFile->Append(wxID_EXIT);
+    //Set the frame icon
+    wxIcon icon("E:\\Mod manager\\GameOrganizer\\src\\favicon.ico", wxBITMAP_TYPE_ICO);
+    SetIcon(wxIcon(icon));
 
-    wxMenu *menuHelp = new wxMenu;
-    menuHelp->Append(wxID_ABOUT);
+    //Create a menu bar
+    wxMenu *fileMenu = new wxMenu;
 
-    wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(menuFile, "&File");
-    menuBar->Append(menuHelp, "&Help");
-    SetMenuBar( menuBar );
+    //Placing the about item under the help menu
+    wxMenu *helpMenu = new wxMenu;
+    helpMenu->Append(wxID_ABOUT, "&About...\tF1",
+                     "Show about dialog");
 
-    CreateStatusBar();
+    fileMenu->Append(wxID_EXIT, "E&xit\tAlt-X",
+                     "Quit this program");
 
+    //Appends the menu to the menu bar
+    wxMenuBar *menuBar = new wxMenuBar();
+    menuBar->Append(fileMenu, "&File");
+    menuBar->Append(helpMenu, "&Help");
+
+    //Attach the menu to the frame
+    SetMenuBar(menuBar);
+
+    //Status bar
+    CreateStatusBar(2);
     SetStatusText("Welcome to wxWidgets!");
+};
 
-    Bind(wxEVT_MENU, &MyFrame::OnHello, this, ID_Hello);
-    Bind(wxEVT_MENU, &MyFrame::OnAbout, this, wxID_ABOUT);
-    Bind(wxEVT_MENU, &MyFrame::OnExit, this, wxID_EXIT);
-}
-
-void MyFrame::OnExit(wxCommandEvent& event)
+void MainFrame::OnAbout(wxCommandEvent& event)
 {
-    Close(true);
-}
+    wxString msg;
+    msg.Printf("Hello and welcome to %s",
+    wxVERSION_STRING);
 
-void MyFrame::OnAbout(wxCommandEvent& event)
-{
-    wxMessageBox("This is a wxWidgets Hello World example", "About Hello World", wxOK | wxICON_INFORMATION);
-}
+    wxMessageBox(msg, "About Minimal",
+    wxOK | wxICON_INFORMATION, this);
+};
 
-void MyFrame::OnHello(wxCommandEvent& event)
+void MainFrame::OnQuit(wxCommandEvent& event)
 {
-    wxLogMessage("Hello world from wxWidgets!");
-}
+    //Clears the frame, ends the application
+    Close();
+};
